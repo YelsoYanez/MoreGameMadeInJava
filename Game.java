@@ -11,6 +11,7 @@ import java.awt.image.DataBufferInt;
 import javax.swing.JFrame;
 
 import com.thecherno.rain.graphics.Screen;
+import com.thecherno.rain.input.Keyboard;
 
 //getting runnable
 public class Game extends Canvas implements Runnable{
@@ -39,6 +40,7 @@ public class Game extends Canvas implements Runnable{
 	//making a window using jframe
 	private JFrame frame;
 	
+	private Keyboard key;
 	//making game loop
 	private boolean running = false;
 	
@@ -64,6 +66,9 @@ public class Game extends Canvas implements Runnable{
 		screen = new Screen(width, height);
 		frame = new JFrame();//the constructor is going to set our set and dim
 		//to jframe
+		key = new Keyboard();
+		
+		addKeyListener(key);
 		
 	}
 	
@@ -130,8 +135,18 @@ public class Game extends Canvas implements Runnable{
 		stop();
 	}
 	
+	int x = 0, y = 0;
 	public void update(){
+		key.update();
 		
+		//this lines of code are made to be able to controll the map
+		if(key.up) y--;
+		if(key.down) y++;
+		if(key.left) x--;
+		if(key.right) x++;
+		
+		//x++;
+		//y++;
 	}
 	
 	public void render(){
@@ -145,7 +160,7 @@ public class Game extends Canvas implements Runnable{
 		
 		screen.clear();
 		
-		screen.render();// excecute the render method
+		screen.render(x,y);// excecute the render method
 		
 		//this loop set the pixel arrya from screen to the pixel
 		//array in our game class
