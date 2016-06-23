@@ -12,6 +12,8 @@ import javax.swing.JFrame;
 
 import com.thecherno.rain.graphics.Screen;
 import com.thecherno.rain.input.Keyboard;
+import com.thecherno.rain.level.Level;
+import com.thecherno.rain.level.RandomLevel;
 
 //getting runnable
 public class Game extends Canvas implements Runnable{
@@ -41,6 +43,8 @@ public class Game extends Canvas implements Runnable{
 	private JFrame frame;
 	
 	private Keyboard key;
+	
+	private Level level;
 	//making game loop
 	private boolean running = false;
 	
@@ -68,6 +72,8 @@ public class Game extends Canvas implements Runnable{
 		//to jframe
 		key = new Keyboard();
 		
+		//calling random to render the tile
+		level = new RandomLevel(64,64);
 		addKeyListener(key);
 		
 	}
@@ -165,7 +171,10 @@ public class Game extends Canvas implements Runnable{
 		
 		screen.clear();
 		
-		screen.render(x,y);// excecute the render method
+		//rendering the level 
+		level.render(x, y, screen);
+		
+		//screen.render(x,y);// excecute the render method
 		
 		//this loop set the pixel arrya from screen to the pixel
 		//array in our game class

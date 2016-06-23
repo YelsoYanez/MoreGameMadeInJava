@@ -6,7 +6,7 @@ import com.thecherno.rain.level.tile.Tile;
 
 public class Screen {
 
-	private int width, height;
+	public int width, height;
 	//private int height;	
 	public int[] pixels;
 	
@@ -14,8 +14,10 @@ public class Screen {
 	public final int MAP_SIZE = 64;
 	public final int MAP_SIZE_MASK = MAP_SIZE - 1;
 	
+	public int xOffset, yOffset;
+	
 	//creating tile map for the background
-	public int[] tiles = new int[MAP_SIZE*MAP_SIZE];
+	public int[] tiles = new int[MAP_SIZE * MAP_SIZE];
 	
 	private Random random = new Random();
 	
@@ -48,6 +50,7 @@ public class Screen {
 	//int counter = 0;
 	
 	/////////////////////////
+	/*
 	public void render( int xOffset, int yOffset){
 		//for testing only
 		//counter++;
@@ -96,13 +99,16 @@ public class Screen {
 					//the offset helps to have the map in perfect location
 				}
 				
-		}
+		} 
 		
-	}
+	}*/
 	
 	
 	//rendering tiles for game
 	public void renderTile(int xp, int yp, Tile tile){
+		xp -= xOffset;
+		yp -= yOffset;
+		
 		//tile size. we are using tiles of 16 by 16 by default but we can change
 		//dealing with realtibe position vs absolute position
 		//absolute position help of a map
@@ -119,7 +125,10 @@ public class Screen {
 				//review this lines of code
 				//the width that is used here it refer to the screen width
 				//the effect we are trying to get is the effect of a screen that keeps scrolling
-				if(xa < 0 || xa >= width || ya < 0 || ya >= width) break;
+				//to fix the black screen side in the game we add -tile.sprite.SIZE so the image
+				//can count the negative side in the x axis
+				if(xa < -tile.sprite.SIZE || xa >= width || ya < 0 || ya >= height) break;
+				if(xa < 0) xa = 0;//the reason we do this is because -tile.sprite.SIZE is not checking for small negative values
 				//pixels[] deals with what pixels get render
 				//sprite pixels deals with what prite pixels get render
 				pixels[xa + ya * width] = tile.sprite.pixels[x + y * tile.sprite.SIZE];
@@ -132,6 +141,11 @@ public class Screen {
 		}
 		
 	
+	}
+	
+	public void setOffset(int xOffset, int yOffset){
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
 	}
 
 }
