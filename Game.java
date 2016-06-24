@@ -3,6 +3,7 @@ package com.thecherno.rain;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -10,6 +11,7 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import com.thecherno.rain.entity.mob.Player;
 import com.thecherno.rain.graphics.Screen;
 import com.thecherno.rain.input.Keyboard;
 import com.thecherno.rain.level.Level;
@@ -45,6 +47,9 @@ public class Game extends Canvas implements Runnable{
 	private Keyboard key;
 	
 	private Level level;
+	
+	//creating the player
+	private Player player;
 	//making game loop
 	private boolean running = false;
 	
@@ -74,6 +79,9 @@ public class Game extends Canvas implements Runnable{
 		
 		//calling random to render the tile
 		level = new RandomLevel(64,64);
+		
+		player = new Player(key);
+		
 		addKeyListener(key);
 		
 	}
@@ -147,15 +155,17 @@ public class Game extends Canvas implements Runnable{
 		stop();
 	}
 	
-	int x , y = 0;
+	//int x , y = 0;
 	public void update(){
 		key.update();
+		//updating player
+		player.update();
 		//this lines of code are made to be able to controll the map
-		if(key.up) y--;
+		/*if(key.up) y--;
 		if(key.down) y++;
 		if(key.left) x--;
 		if(key.right) x++;
-		
+		*/
 		//x++;
 		//y++;
 	}
@@ -172,7 +182,7 @@ public class Game extends Canvas implements Runnable{
 		screen.clear();
 		
 		//rendering the level 
-		level.render(x, y, screen);
+		level.render(player.x, player.y, screen);
 		
 		//screen.render(x,y);// excecute the render method
 		
@@ -189,6 +199,9 @@ public class Game extends Canvas implements Runnable{
 		//g.setColor(Color.BLACK);//change color of background
 		//g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(image, 0, 0, getWidth(), getHeight(),null);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Verdana", 0, 50));
+		g.drawString("X: " + player.x  + ", Y: " + player.y, 350 , 400 );
 		g.dispose();
 		bs.show();//this make the next buffer to show up
 		
